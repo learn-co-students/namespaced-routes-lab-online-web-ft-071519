@@ -8,7 +8,17 @@ class ArtistsController < ApplicationController
   end
 
   def new
-    @artist = Artist.new
+    # binding.pry
+    preference = Preference.first
+    if preference
+      if preference.allow_create_artists == true
+        @artist = Artist.new
+      else
+        redirect_to artists_path
+      end
+    else
+      @artist = Artist.new
+    end
   end
 
   def create
@@ -47,6 +57,6 @@ class ArtistsController < ApplicationController
   private
 
   def artist_params
-    params.require(:artist).permit(:name)
+    params.require(:artist).permit(:name, :preference_id)
   end
 end
